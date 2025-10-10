@@ -31,9 +31,10 @@ if ($file == "." || $file == ".." || $file == "index.php" || $file == "") {
         </div>
     </div>
     ');
-
 }
 
 ?>
+<h1>IN COLLAB CON IL BRO ETTORE</h1>
+
 </div>
 </body>
