@@ -1,6 +1,7 @@
 <?php
 require_once("../lib/head.html");
-$abilities = ["ciaooo", "ciaooo"]
+$abilities = ["ciaooo", "ciaooo"];
+error_reporting(0);
     ?>
 
 <body class="bg-dark text-light">
