@@ -34,7 +34,6 @@ if ($file == "." || $file == ".." || $file == "index.php" || $file == "") {
 }
 
 ?>
-<h1>IN COLLAB CON IL BRO ETTORE</h1>
 
 </div>
 </body>
