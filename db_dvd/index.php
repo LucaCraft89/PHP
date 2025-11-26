@@ -1,142 +1,118 @@
 <?php
-require_once("../lib/head.html");
-error_reporting(0);
-$navName = "Home"
-    ?>
+require_once('config.php');
+session_start();
 
-<body class="bg-dark text-light">
-    <?php
-    require_once("nav.php");
-    ?>
+// If already logged in, redirect to menu
+if (isset($_SESSION['SessionID'])) {
+    header("Location: " . BASE_PATH . "/menu.php");
+    exit();
+}
+require_once('../lib/head.html');
+?>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+<style>
+    body {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 
-    <main role="main" class="container py-4">
-        <div class="row g-4">
-            <!-- Visualizza Tabelle -->
-            <div class="col-md-6 col-lg-4">
-                <div class="card bg-secondary text-white h-100 shadow">
-                    <div class="card-body">
-                        <h4 class="card-title mb-3"><i class="bi bi-table"></i> Visualizza Tabelle</h4>
-                        <div class="list-group">
-                            <?php
-                            require_once("./dbKit.php");
-                            $DB = ConnectToDB();
-                            $FetchAvailableTables = $DB->query("SHOW TABLES");
+    .login-card {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        overflow: hidden;
+        max-width: 450px;
+        width: 100%;
+    }
 
-                            if ($FetchAvailableTables) {
-                                while ($row = $FetchAvailableTables->fetch_array(MYSQLI_NUM)) {
-                                    echo '<a href="showTable.php?table=' . $row[0] . '" class="list-group-item list-group-item-action bg-dark text-light border-secondary mb-1">' . $row[0] . '</a>';
-                                }
-                            } else {
-                                echo "Error fetching tables: " . $DB->error;
-                            }
-                            ?>
-                        </div>
-                    </div>
+    .login-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 2rem;
+        text-align: center;
+        color: white;
+    }
+
+    .login-logo {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        border: 3px solid white;
+        margin-bottom: 1rem;
+    }
+
+    .login-body {
+        padding: 2rem;
+    }
+
+    .btn-login {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        padding: 0.75rem;
+        font-weight: bold;
+    }
+
+    .btn-login:hover {
+        background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    }
+</style>
+</head>
+
+<body>
+    <div class="login-card">
+        <div class="login-header">
+            <img src="<?php echo BASE_PATH; ?>/assets/icon.jpeg" alt="Logo" class="login-logo">
+            <h2 class="mb-0">DVD Rental System</h2>
+            <p class="mb-0">By ETTORE & LUCA</p>
+        </div>
+        <div class="login-body">
+            <h4 class="text-center mb-4">Accedi al tuo account</h4>
+            <?php
+            if (isset($_SESSION['login_error'])) {
+                echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill"></i> ' . htmlspecialchars($_SESSION['login_error']) . '
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>';
+                unset($_SESSION['login_error']);
+            }
+            if (isset($_SESSION['registration_success'])) {
+                echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="bi bi-check-circle-fill"></i> ' . htmlspecialchars($_SESSION['registration_success']) . '
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>';
+                unset($_SESSION['registration_success']);
+            }
+            ?>
+            <form action="<?php echo BASE_PATH; ?>/auth/login.php" method="post">
+                <div class="mb-3">
+                    <label for="phone" class="form-label">
+                        <i class="bi bi-telephone-fill"></i> Numero di telefono
+                    </label>
+                    <input type="number" class="form-control" id="phone" name="phone"
+                        placeholder="Inserisci il numero di telefono" required>
                 </div>
-            </div>
-
-            <!-- DVD noleggiati dal Cliente -->
-            <div class="col-md-6 col-lg-4">
-                <div class="card bg-secondary text-white h-100 shadow">
-                    <div class="card-body">
-                        <h4 class="card-title mb-3"><i class="bi bi-person-circle"></i> DVD Noleggiati dal Cliente</h4>
-                        <form action="lookupClientRentals.php" method="post">
-                            <div class="mb-3">
-                                <label for="searchKey" class="form-label">Cerca per:</label>
-                                <input type="text" name="searchKey" id="searchKey"
-                                    class="form-control bg-dark text-light border-secondary"
-                                    placeholder="Inserisci valore..." required>
-                            </div>
-                            <div class="mb-3">
-                                <select name="searchType" class="form-select bg-dark text-light border-secondary">
-                                    <option value="1">Codice Tessera</option>
-                                    <option value="2">Telefono</option>
-                                </select>
-                            </div>
-                            <button type="submit" class="btn btn-primary w-100">Cerca</button>
-                        </form>
-                    </div>
+                <div class="mb-3">
+                    <label for="pass" class="form-label">
+                        <i class="bi bi-lock-fill"></i> Password
+                    </label>
+                    <input type="password" class="form-control" id="pass" name="pass"
+                        placeholder="Inserisci la password" required>
                 </div>
-            </div>
-
-            <!-- Cerca per categoria -->
-            <div class="col-md-6 col-lg-4">
-                <div class="card bg-secondary text-white h-100 shadow">
-                    <div class="card-body">
-                        <h4 class="card-title mb-3"><i class="bi bi-tag"></i> Cerca per Categoria</h4>
-                        <form action="lookupCategories.php" method="post">
-                            <div class="mb-3">
-                                <label for="cat" class="form-label">Seleziona categoria:</label>
-                                <select name="cat" id="cat" class="form-select bg-dark text-light border-secondary">
-                                    <?php
-                                    $SelectAllCategories = $DB->prepare("SELECT * FROM tblCategorie WHERE 1");
-                                    $SelectAllCategories->execute();
-                                    $cats = $SelectAllCategories->get_result();
-                                    while ($catRow = $cats->fetch_assoc()) {
-                                        echo ('<option value="' . $catRow['CodCategoria'] . '">' . $catRow['Nome'] . '</option>');
-                                    }
-                                    ?>
-                                </select>
-                            </div>
-                            <button type="submit" class="btn btn-primary w-100">Cerca</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Cerca per iniziale -->
-            <div class="col-md-6 col-lg-4">
-                <div class="card bg-secondary text-white h-100 shadow">
-                    <div class="card-body">
-                        <h4 class="card-title mb-3"><i class="bi bi-alphabet"></i> Cerca Attori per Iniziale</h4>
-                        <form action="lookupLetter.php" method="post">
-                            <div class="mb-3">
-                                <label for="iniziale" class="form-label">Iniziale nome:</label>
-                                <input type="text" name="iniziale" id="iniziale"
-                                    class="form-control bg-dark text-light border-secondary" placeholder="Es: A"
-                                    maxlength="1" required>
-                            </div>
-                            <button type="submit" class="btn btn-primary w-100">Cerca</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Cerca per regista -->
-            <div class="col-md-6 col-lg-4">
-                <div class="card bg-secondary text-white h-100 shadow">
-                    <div class="card-body">
-                        <h4 class="card-title mb-3"><i class="bi bi-film"></i> Cerca per Regista</h4>
-                        <form action="lookupDirected.php" method="post">
-                            <div class="mb-3">
-                                <label for="regista" class="form-label">Cognome regista:</label>
-                                <input type="text" name="regista" id="regista"
-                                    class="form-control bg-dark text-light border-secondary"
-                                    placeholder="Es: Ozpetek, Argento" required>
-                            </div>
-                            <button type="submit" class="btn btn-primary w-100">Cerca</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-
-            <!-- DVD più affittato -->
-            <div class="col-md-6 col-lg-4">
-                <div class="card bg-secondary text-white h-100 shadow">
-                    <div class="card-body d-flex flex-column">
-                        <h4 class="card-title mb-3"><i class="bi bi-trophy"></i> DVD Più Affittato</h4>
-                        <p class="text-muted">Visualizza il DVD con il maggior numero di noleggi</p>
-                        <a href="mostRented.php" class="btn btn-primary w-100 mt-auto">Visualizza</a>
-                    </div>
-                </div>
+                <button type="submit" class="btn btn-primary btn-login w-100">
+                    <i class="bi bi-box-arrow-in-right"></i> Accedi
+                </button>
+            </form>
+            <hr class="my-4">
+            <div class="text-center">
+                <p class="mb-2">Non hai un account?</p>
+                <a href="<?php echo BASE_PATH; ?>/auth/register_form.php" class="btn btn-outline-secondary">
+                    <i class="bi bi-person-plus-fill"></i> Registrati
+                </a>
             </div>
         </div>
-    </main>
-
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
-        crossorigin="anonymous"></script>
+    </div>
 </body>
 
 </html>

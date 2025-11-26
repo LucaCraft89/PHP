@@ -1,4 +1,5 @@
 <?php
+require_once("auth/checkAuth.php");
 require_once("../lib/head.html");
 error_reporting(0);
 $navName = "Home"
@@ -130,6 +131,43 @@ $navName = "Home"
                     </div>
                 </div>
             </div>
+
+            <!-- Lista Clienti -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card bg-secondary text-white h-100 shadow">
+                    <div class="card-body d-flex flex-column">
+                        <h4 class="card-title mb-3"><i class="bi bi-trophy"></i> Lista Clienti</h4>
+                        <p class="text-muted">Visualizza Lista Clienti Per Modificarla</p>
+                        <a href="clienti.php" class="btn btn-primary w-100 mt-auto">Visualizza</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card bg-secondary text-white h-100 shadow">
+                    <div class="card-body">
+                        <h4 class="card-title mb-3"><i class="bi bi-film"></i>Aggiungi/Elimina/Visualizza noleggi
+                            cliente</h4>
+                        <form action="viewDetailedClient.php" method="post" target="_Self">
+                            <div class="mb-3">
+                                <label for="regista" class="form-label">Cliente:</label>
+                                <select name="CodTessera" class="form-select bg-dark text-light border-secondary">
+                                    <?php
+                                    $SelectAllCilents = $DB->prepare("SELECT Nome, Cognome, CodTessera FROM tblClienti WHERE 1");
+                                    $SelectAllCilents->Execute();
+                                    $FoundClients = $SelectAllCilents->get_result();
+                                    while ($Client = $FoundClients->fetch_assoc()) {
+                                        echo ('<option value="' . $Client['CodTessera'] . '"> ' . $Client['Nome'] . ' ' . $Client['Cognome'] . '</option>');
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Cerca</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </main>
 

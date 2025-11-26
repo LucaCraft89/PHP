@@ -1,4 +1,5 @@
 <?php
+require_once("auth/checkAuth.php");
 require_once("../lib/head.html");
 error_reporting(0);
 $navName = "Noleggi Cliente"
@@ -106,7 +107,7 @@ $navName = "Noleggi Cliente"
         ?>
 
         <div class="mt-4">
-            <a href="index.php" class="btn btn-primary">
+            <a href="menu.php" class="btn btn-primary">
                 <i class="bi bi-arrow-left"></i> Torna al Menu
             </a>
         </div>
