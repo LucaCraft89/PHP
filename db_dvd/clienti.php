@@ -165,7 +165,6 @@ $navName = "Categorie"
         function insertClient($Cognome, $Nome, $Via, $NumCivico, $Citta, $Telefono, $DataEmissioneTessera)
         {
             $DB = ConnectToDB();
-            // Generate a default password (you might want to change this)
             $defaultPassword = password_hash("password123", PASSWORD_DEFAULT);
             $void_session = "";
 

@@ -4,55 +4,9 @@ session_start();
 require_once(dirname(dirname(__DIR__)) . '/lib/head.html');
 ?>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-<style>
-    body {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        min-height: 100vh;
-        padding: 2rem 0;
-    }
+<link rel="stylesheet" href="<?php echo BASE_PATH; ?>/assets/css/style.css">
 
-    .register-card {
-        background: rgba(255, 255, 255, 0.95);
-        border-radius: 15px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-        overflow: hidden;
-        max-width: 600px;
-        margin: 0 auto;
-    }
-
-    .register-header {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        padding: 2rem;
-        text-align: center;
-        color: white;
-    }
-
-    .register-logo {
-        width: 80px;
-        height: 80px;
-        border-radius: 50%;
-        border: 3px solid white;
-        margin-bottom: 1rem;
-    }
-
-    .register-body {
-        padding: 2rem;
-    }
-
-    .btn-register {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        border: none;
-        padding: 0.75rem;
-        font-weight: bold;
-    }
-
-    .btn-register:hover {
-        background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
-    }
-</style>
-</head>
-
-<body>
+<body class="register-page">
     <div class="container">
         <div class="register-card">
             <div class="register-header">

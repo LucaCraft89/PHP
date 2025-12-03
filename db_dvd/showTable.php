@@ -21,7 +21,6 @@ $navName = "Show Table"
                     $tableName = htmlspecialchars($_GET['table']);
                     echo '<h3 class="mb-4"><i class="bi bi-table"></i> Tabella: ' . $tableName . '</h3>';
 
-                    //fetch titoli colonne
                     $ColumnNamesQuery = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = ?";
                     $stmt = $DB->prepare($ColumnNamesQuery);
                     $stmt->bind_param("s", $_GET['table']);
@@ -42,7 +41,6 @@ $navName = "Show Table"
                     echo '</tr>';
                     echo '</thead><tbody>';
 
-                    //fetch dati colonne
                     $FetchTableContent = $DB->prepare("SELECT * FROM " . $_GET['table'] . " WHERE 1");
                     $FetchTableContent->execute();
                     $FoundData = $FetchTableContent->get_result();

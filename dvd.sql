@@ -1,9 +1,9 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.2deb1
+-- version 5.2.2deb1+deb13u1
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Oct 29, 2025 at 09:31 AM
+-- Generation Time: Nov 26, 2025 at 08:31 AM
 -- Server version: 11.8.3-MariaDB-0+deb13u1 from Debian
 -- PHP Version: 8.4.11
 
@@ -74,16 +74,18 @@ CREATE TABLE `tblClienti` (
   `NumCivico` int(11) NOT NULL,
   `Citta` varchar(64) NOT NULL,
   `Telefono` bigint(20) NOT NULL,
-  `DataEmissioneTessera` date NOT NULL
+  `DataEmissioneTessera` date NOT NULL,
+  `password` varchar(60) NOT NULL,
+  `SessionID` varchar(512) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
 --
 -- Dumping data for table `tblClienti`
 --
 
-INSERT INTO `tblClienti` (`CodTessera`, `Cognome`, `Nome`, `Via`, `NumCivico`, `Citta`, `Telefono`, `DataEmissioneTessera`) VALUES
-(1, 'giacomini', 'ettore', 'oslavia', 34, 'pordenone', 3515486140, '2001-09-11'),
-(3, 'dall\'acqua', 'luca', 'montebelluna', 11, 'pordenone', 35169696, '2025-10-09');
+INSERT INTO `tblClienti` (`CodTessera`, `Cognome`, `Nome`, `Via`, `NumCivico`, `Citta`, `Telefono`, `DataEmissioneTessera`, `password`, `SessionID`) VALUES
+(1, 'giacomini', 'ettore', 'oslavia', 34, 'pordenone', 3515486140, '2001-09-11', '$2y$10$3VEq8y/aiocAxeQJKJFcueYRPLu5Hy67XiF1svb4EskISdHXJJ9Fm', '4d8e5b7ae1538d4dc679c0f825927f1bb2b1f24607cca95839d7a55d14ad5a9e3d364ac054976481450db36492e64f82db625667152bb6c6bda93d2927e751d12d037cc28c0f64dec4410fc9092ef531876486401f0b97fd6c56e849333a341b810f077a1a5ff1e84b45bb5ac8a5c600094cd686cc5d46f8cd4a2a2ad77b59d4d9ed160b03374c5893ea89280ee1ba6caa6dd7bdaf3ebfe33a1be9284dc0bbc0fd82b1d0462fc71f6a1177d3428eeadf05156f0096e89360c303e06eceb4c23fdfcd3e443b09b9773c302e7a56bd6225c69b267ebcef03534d1d5ed29480d3f4eaad537225127fc07f2984d482b512e6a8f741ab1e60aa5fa1b21db3a8c9695e'),
+(4, 'rossi', 'giuseppe', 'rossi', 104, 'MILANO', 333333333, '2001-09-11', '$2y$12$LljYrwL3PQXohBw9NxhfbeBaMxxqmoQHMx4xN656z0TXm5kTP.1mK', '3937e1ff2a5f5f553a8778b466f65ddacb0169170dfae1ba80cff0cf08657d25c37510c527affbed281a95f2e8eab39a7e772a5dc576aee57286e69cd1c3a14fb3b86968a4299ada45a06ecdaeebc73c43c95ae202db8338b17108af1d6c886e9d40ff4b779ab5ab9f2f37b150f2844216f9a2ebac1daa4f44276a60b4806b6f05448ecfa336f111880337f1e58b88f9c854070b458bbf9046a3cb0f5fe6a75a7511c4aa39472e3493a8e5f56c8e1b90a77ff8e5b6b8910a22d63f3b74b450f6182229a774f0fb476abd953c383c49966d1db62a843effc97a8272b371afbdd4e2da1e11241173d9cd0b0473fe9e9fd5164a2714a5039a34a9db6d671cb457b5');
 
 -- --------------------------------------------------------
 
@@ -182,9 +184,8 @@ CREATE TABLE `tblNoleggi` (
 --
 
 INSERT INTO `tblNoleggi` (`CodNoleggio`, `CodTessera`, `CodDvd`, `DataNoleggio`, `DataScadenza`, `TariffaGiornaliera`) VALUES
-(1, 1, 1, '2025-10-15', '2025-10-31', 1.5),
-(2, 3, 1, '2025-10-02', '2025-10-25', 3),
-(3, 1, 4, '2025-10-09', '2025-10-31', 4);
+(4, 1, 5, '2025-11-20', '2025-11-26', 12),
+(5, 1, 11, '2021-10-02', '9222-10-10', 12);
 
 -- --------------------------------------------------------
 
@@ -279,7 +280,7 @@ ALTER TABLE `tblCategorie`
 -- AUTO_INCREMENT for table `tblClienti`
 --
 ALTER TABLE `tblClienti`
-  MODIFY `CodTessera` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `CodTessera` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `tblDiretti`
@@ -303,7 +304,7 @@ ALTER TABLE `tblInterpreti`
 -- AUTO_INCREMENT for table `tblNoleggi`
 --
 ALTER TABLE `tblNoleggi`
-  MODIFY `CodNoleggio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `CodNoleggio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `tblRegisti`

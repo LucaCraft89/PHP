@@ -54,7 +54,6 @@ $navName = "Noleggi Cliente"
             if ($SearchType > 0 && $SearchType <= 3) {
                 switch ($SearchType) {
                     case 1:
-                        //ricerca per codice
                         $CodTessera = (int) $_POST['searchKey'];
                         $DB = ConnectToDB();
                         $SelectDvdsRented = $DB->prepare("SELECT 
@@ -77,7 +76,6 @@ $navName = "Noleggi Cliente"
                         PrintFoundTable($FoundDvdRentals);
                         break;
                     case 2:
-                        //ricerca per numero di telefono:
                         $Telefono = (int) $_POST['searchKey'];
                         $DB = ConnectToDB();
                         $SelectDvdsRented = $DB->prepare("SELECT 

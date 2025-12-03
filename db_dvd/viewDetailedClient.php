@@ -56,7 +56,6 @@ $navName = "Show Customer Info"
                 $DB = ConnectToDB();
 
                 if (isset($_POST['CodTessera'])) {
-                    //fetch dati colonne
                     $FetchTableContent = $DB->prepare("SELECT 
                                                         c.CodTessera,
                                                         c.Nome,

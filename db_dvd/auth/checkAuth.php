@@ -11,20 +11,17 @@ if (!isset($_SESSION['SessionID'])) {
     exit();
 }
 
-// Verifica la validità della sessione nel database
 $FetchUserData = $DB->prepare("SELECT CodTessera, Nome, Cognome FROM tblClienti WHERE SessionID = ?");
 $FetchUserData->bind_param("s", $_SESSION['SessionID']);
 $FetchUserData->execute();
 $FetchedUser = $FetchUserData->get_result();
 
 if ($FetchedUser->num_rows === 0) {
-    // Sessione non valida
     session_destroy();
     header("Location: " . BASE_PATH . "/index.php");
     exit();
 }
 
-// Aggiorna i dati della sessione
 $User = $FetchedUser->fetch_assoc();
 $_SESSION['CodTessera'] = $User['CodTessera'];
 $_SESSION['Nome'] = $User['Nome'];
