@@ -143,6 +143,19 @@ $navName = "Home"
                 </div>
             </div>
 
+            <!-- Lista DVD -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card bg-secondary text-white h-100 shadow">
+                    <div class="card-body d-flex flex-column">
+                        <h4 class="card-title mb-3"><i class="bi bi-trophy"></i> Lista DVD</h4>
+                        <p class="text-muted">Visualizza Lista DVD Per Modificarla</p>
+                        <h4 class="fw-bold">!!CON LE IMMAGINI!!</h4>
+                        <a href="dvd.php" class="btn btn-primary w-100 mt-auto">Visualizza</a>
+                    </div>
+                </div>
+            </div>
+
+
             <div class="col-md-6 col-lg-4">
                 <div class="card bg-secondary text-white h-100 shadow">
                     <div class="card-body">

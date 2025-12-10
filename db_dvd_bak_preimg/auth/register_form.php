@@ -1,0 +1,113 @@
+<?php
+require_once(dirname(__DIR__) . '/config.php');
+session_start();
+require_once(dirname(dirname(__DIR__)) . '/lib/head.html');
+?>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+<link rel="stylesheet" href="<?php echo BASE_PATH; ?>/assets/css/style.css">
+
+<body class="register-page">
+    <div class="container">
+        <div class="register-card">
+            <div class="register-header">
+                <img src="<?php echo BASE_PATH; ?>/assets/icon.jpeg" alt="Logo" class="register-logo">
+                <h2 class="mb-0">Registrazione</h2>
+                <p class="mb-0">DVD Rental System</p>
+            </div>
+            <div class="register-body">
+                <h4 class="text-center mb-4">Crea il tuo account</h4>
+                <?php
+                if (isset($_SESSION['registration_error'])) {
+                    echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill"></i> ' . htmlspecialchars($_SESSION['registration_error']) . '
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>';
+                    unset($_SESSION['registration_error']);
+                }
+                ?>
+                <form action="<?php echo BASE_PATH; ?>/auth/register.php" method="post">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="nome" class="form-label">
+                                <i class="bi bi-person-fill"></i> Nome
+                            </label>
+                            <input type="text" class="form-control" id="nome" name="nome"
+                                placeholder="Inserisci il nome" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="cognome" class="form-label">
+                                <i class="bi bi-person-fill"></i> Cognome
+                            </label>
+                            <input type="text" class="form-control" id="cognome" name="cognome"
+                                placeholder="Inserisci il cognome" required>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-8 mb-3">
+                            <label for="via" class="form-label">
+                                <i class="bi bi-geo-alt-fill"></i> Via
+                            </label>
+                            <input type="text" class="form-control" id="via" name="via" placeholder="Es: Via Roma"
+                                required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="numcivico" class="form-label">
+                                <i class="bi bi-house-door-fill"></i> N. Civico
+                            </label>
+                            <input type="text" class="form-control" id="numcivico" name="numcivico" placeholder="Es: 10"
+                                required>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="citta" class="form-label">
+                            <i class="bi bi-building"></i> Città
+                        </label>
+                        <input type="text" class="form-control" id="citta" name="citta" placeholder="Es: Milano"
+                            required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="telefono" class="form-label">
+                            <i class="bi bi-telephone-fill"></i> Telefono
+                        </label>
+                        <input type="tel" class="form-control" id="telefono" name="telefono"
+                            placeholder="Es: 3201234567" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="dataemissionetessera" class="form-label">
+                            <i class="bi bi-calendar-fill"></i> Data Emissione Tessera
+                        </label>
+                        <input type="date" class="form-control" id="dataemissionetessera" name="dataemissionetessera"
+                            value="<?php echo date('Y-m-d'); ?>" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="password" class="form-label">
+                            <i class="bi bi-lock-fill"></i> Password
+                        </label>
+                        <input type="password" class="form-control" id="password" name="password"
+                            placeholder="Inserisci la password" required minlength="6">
+                        <small class="form-text text-muted">La password deve contenere almeno 6 caratteri</small>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-register w-100 mb-3">
+                        <i class="bi bi-person-plus-fill"></i> Registrati
+                    </button>
+                </form>
+
+                <hr class="my-3">
+                <div class="text-center">
+                    <p class="mb-2">Hai già un account?</p>
+                    <a href="<?php echo BASE_PATH; ?>/index.php" class="btn btn-outline-secondary">
+                        <i class="bi bi-box-arrow-in-right"></i> Accedi
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
