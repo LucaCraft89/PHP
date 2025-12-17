@@ -10,6 +10,8 @@ if (isset($_SESSION['SessionID'])) {
     $ClearSession->bind_param("ss", $emptySession, $_SESSION['SessionID']);
     $ClearSession->execute();
 }
+// cancella cookie
+setcookie("remember_token", "", time() - 3600, "/");
 
 session_unset();
 session_destroy();

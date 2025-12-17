@@ -6,6 +6,20 @@ require_once(dirname(__DIR__) . '/config.php');
 require_once("dbKit.php");
 $DB = ConnectToDB();
 
+if (!isset($_SESSION['SessionID']) && isset($_COOKIE['remember_token'])) {
+
+    $FetchUserData = $DB->prepare("SELECT CodTessera,SessionID  FROM tblClienti WHERE SessionID = ?");
+    $FetchUserData->bind_param("s", $_COOKIE['remember_token']);
+    $FetchUserData->execute();
+    $FetchedUser = $FetchUserData->get_result();
+    $user = $FetchedUser->fetch_assoc();
+    if ($FetchedUser->num_rows !== 0) {
+        $_SESSION['CodTessera'] = $user['CodTessera'];
+        $_SESSION['SessionID'] = $user['SessionID'];
+    }
+}
+
+
 if (!isset($_SESSION['SessionID'])) {
     header("Location: " . BASE_PATH . "/index.php");
     exit();

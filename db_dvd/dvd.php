@@ -42,8 +42,10 @@ $navName = "DVD"
             while ($dvdRow = $FoundTable->fetch_assoc()) {
                 echo ("<tr>
 <td>
-       <img src='assets/dvd_img/".((file_exists("assets/dvd_img/". $dvdRow['CodDvd'].".png")? $dvdRow['CodDvd'] : "default")).".png' class='img-thumbnail'>
-</td>
+<a href = 'edit_img.php?idDvd=". $dvdRow['CodDvd']."'>
+       <img width='200px' height='200px' src='assets/dvd_img/".((file_exists("assets/dvd_img/". $dvdRow['CodDvd'].".png")? $dvdRow['CodDvd'] : "default")).".png' class='img-thumbnail'>
+</a>
+       </td>
 <form method='post' action='" . basename($_SERVER['SCRIPT_FILENAME']) . "'>
 <td>
         <input required readonly class='form-control' type='number' name='CodDvd' id='CodDvd' placeholder='CodDvd' value='" . htmlspecialchars($dvdRow['CodDvd']) . "'>

@@ -1,7 +1,7 @@
 <?php
 require_once('config.php');
 session_start();
-
+require_once("auth/checkAuth.php");
 // If already logged in, redirect to menu
 if (isset($_SESSION['SessionID'])) {
     header("Location: " . BASE_PATH . "/menu.php");
@@ -51,6 +51,15 @@ require_once('../lib/head.html');
                     </label>
                     <input type="password" class="form-control" id="pass" name="pass"
                         placeholder="Inserisci la password" required>
+                </div>
+                <div class="mb-3">
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="1" id="ricordami" name="ricordami">
+                        <label class="form-check-label" for="ricordami">
+                            Remeber Meeeeee
+                        </label>
+                    </div>
                 </div>
                 <button type="submit" class="btn btn-primary btn-login w-100">
                     <i class="bi bi-box-arrow-in-right"></i> Accedi
