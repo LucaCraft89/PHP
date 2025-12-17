@@ -11,13 +11,18 @@ $navName = "DVD"
     ?>
 
     <main role="main" class="container py-4">
-        <h3 class="mb-4"><i class="bi bi-disc"></i> Lista DVD</h3>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3><i class="bi bi-disc"></i> Lista DVD</h3>
+            <button type="button" class="btn btn-info" id="fetchAllApiBtn">
+                <i class="bi bi-cloud-download"></i> Fetch All from API
+            </button>
+        </div>
         <?php
         function getCategories($CodCategoria, $cats)
         {
             $categories = "";
-            foreach($cats as $catRow){
-                $categories = $categories."<option" . (($CodCategoria == $catRow['CodCategoria']) ? "selected " : "") . " value='" . $catRow['CodCategoria'] . "'>" . $catRow['Nome'] . "</option>\n";
+            foreach ($cats as $catRow) {
+                $categories = $categories . "<option" . (($CodCategoria == $catRow['CodCategoria']) ? "selected " : "") . " value='" . $catRow['CodCategoria'] . "'>" . $catRow['Nome'] . "</option>\n";
             }
             return $categories;
         }
@@ -42,8 +47,8 @@ $navName = "DVD"
             while ($dvdRow = $FoundTable->fetch_assoc()) {
                 echo ("<tr>
 <td>
-<a href = 'edit_img.php?idDvd=". $dvdRow['CodDvd']."'>
-       <img width='200px' height='200px' src='assets/dvd_img/".((file_exists("assets/dvd_img/". $dvdRow['CodDvd'].".png")? $dvdRow['CodDvd'] : "default")).".png' class='img-thumbnail'>
+<a href = 'edit_img.php?idDvd=" . $dvdRow['CodDvd'] . "'>
+       <img width='200px' height='200px' src='assets/dvd_img/" . ((file_exists("assets/dvd_img/" . $dvdRow['CodDvd'] . ".png") ? $dvdRow['CodDvd'] : "default")) . ".png' class='img-thumbnail'>
 </a>
        </td>
 <form method='post' action='" . basename($_SERVER['SCRIPT_FILENAME']) . "'>
@@ -53,7 +58,7 @@ $navName = "DVD"
 <td>
         <select class='form-select' aria-label='Default select example' name='CodCategoria' id='CodCategoria'>
 " .
- getCategories(htmlspecialchars($dvdRow['CodCategoria']), $cats)
+                    getCategories(htmlspecialchars($dvdRow['CodCategoria']), $cats)
                     . "
 
 </select>        
@@ -179,6 +184,112 @@ $navName = "DVD"
             unset($_POST);
         }
         ?>
+
+        <script>
+            // IMPORTANT: Replace this with your actual TMDB Read Access Token
+            const TMDB_API_KEY = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0ZTgyNjQ4MmJmNGVkYTE1ZDMzZTJlNzM3NzcxMzE0OSIsIm5iZiI6MTc2NTk2MjQ4Mi40OTUwMDAxLCJzdWIiOiI2OTQyNzJmMjJiZmE5NmFiZWI0ZTNlNTYiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.gtZQfHqDCPdCyO6Jbz-mv9lyvrq08IiEQNIQc5Y5E7I";
+
+            document.getElementById('fetchAllApiBtn').onclick = async () => {
+                if (!confirm('This will fetch images for all DVDs from TMDB API. Continue?')) {
+                    return;
+                }
+
+                const btn = document.getElementById('fetchAllApiBtn');
+                btn.disabled = true;
+                btn.innerHTML = '<i class="bi bi-hourglass-split"></i> Fetching...';
+
+                // Get all DVD data
+                const dvds = [];
+                const rows = document.querySelectorAll('tbody tr');
+
+                rows.forEach(row => {
+                    const idInput = row.querySelector('input[name="CodDvd"]');
+                    const titleInput = row.querySelector('input[name="Titolo"]');
+                    if (idInput && titleInput) {
+                        dvds.push({
+                            id: idInput.value,
+                            title: titleInput.value
+                        });
+                    }
+                });
+
+                let successCount = 0;
+                let failCount = 0;
+
+                for (const dvd of dvds) {
+                    try {
+                        // Search for movie
+                        const searchResponse = await fetch(
+                            `https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(dvd.title)}`,
+                            {
+                                headers: {
+                                    Authorization: `Bearer ${TMDB_API_KEY}`,
+                                    accept: 'application/json'
+                                }
+                            }
+                        );
+
+                        const searchData = await searchResponse.json();
+
+                        if (searchData.results && searchData.results.length > 0) {
+                            const movieId = searchData.results[0].id;
+
+                            // Get images
+                            const imagesResponse = await fetch(
+                                `https://api.themoviedb.org/3/movie/${movieId}/images`,
+                                {
+                                    headers: {
+                                        Authorization: `Bearer ${TMDB_API_KEY}`,
+                                        accept: 'application/json'
+                                    }
+                                }
+                            );
+
+                            const imagesData = await imagesResponse.json();
+
+                            if (imagesData.posters && imagesData.posters.length > 0) {
+                                const posterPath = imagesData.posters[0].file_path;
+                                const imageUrl = `https://image.tmdb.org/t/p/original${posterPath}`;
+
+                                // Send to server
+                                const formData = new FormData();
+                                formData.append('idDvd', dvd.id);
+                                formData.append('apiImage', imageUrl);
+                                formData.append('batchUpdate', '1');
+
+                                const uploadResponse = await fetch('edit_img.php', {
+                                    method: 'POST',
+                                    body: formData
+                                });
+
+                                if (uploadResponse.ok) {
+                                    successCount++;
+                                    btn.innerHTML = `<i class="bi bi-hourglass-split"></i> Processing ${successCount + failCount}/${dvds.length}...`;
+                                } else {
+                                    failCount++;
+                                }
+                            } else {
+                                failCount++;
+                            }
+                        } else {
+                            failCount++;
+                        }
+
+                        // Small delay to avoid rate limiting
+                        await new Promise(resolve => setTimeout(resolve, 250));
+
+                    } catch (error) {
+                        console.error(`Error processing ${dvd.title}:`, error);
+                        failCount++;
+                    }
+                }
+
+                btn.disabled = false;
+                btn.innerHTML = '<i class="bi bi-cloud-download"></i> Fetch All from API';
+                alert(`Completed!\\nSuccess: ${successCount}\\nFailed: ${failCount}`);
+                location.reload();
+            };
+        </script>
     </main>
 </body>
 
